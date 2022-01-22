@@ -36,12 +36,9 @@ class Calculator extends Controller
                 ->getRepository(Invoices::class)
                 ->findBy($data);
 
-            dump($this->getTotal($documents, $type, $form['currencies']->getData()));
-            //$documents=[['customer'=>'Vendor 1','total'=> 400]];
-
             return $this->render("default/calculator.html.twig", [
              'form' => $form->createView(),
-             'documents' => $documents
+             'documents' => $this->getTotal($documents, $type, $form['currencies']->getData())
             ]);
         }
         // Generate form.
@@ -100,7 +97,7 @@ class Calculator extends Controller
                     $total = array_sum(array_values($value));
             }
             $results[$key]['customer'] = $key;
-            $results[$key]['total'] = $currency->getMoneyInOtherCurrency($total, $srCurrency);
+            $results[$key]['total'] = $currency->getMoneyInOtherCurrency($total, $srCurrency) . ' ' . $srCurrency;
         }
         return $results;
     }
