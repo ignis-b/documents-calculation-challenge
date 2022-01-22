@@ -31,6 +31,22 @@
                             </div>
                             {{ form_end(form) }}
                         </div>
+                        <div class="col-lg-8">
+                            <table>
+                            {% if invoices is not empty %}
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                </tr>
+                            {% endif %}
+                            {% for invoice in invoices %}
+                                <tr>
+                                <td>{{ invoice.customer }}</td>
+                                <td>{{ invoice.total }} {{ invoice.currency }}</td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
                     </div>
                 </div>
             {% endblock %}

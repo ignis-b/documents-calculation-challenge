@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use CalculationBundle\Service\FileUploader;
 
+/**
+ * Controller for inserting csv file
+ * data in Database.
+ *
+ * @author I <ignis.b@gmail.com>
+ */
 class UploadFileController extends Controller
 {
     /**
@@ -17,9 +23,9 @@ class UploadFileController extends Controller
         $form = $this->createForm(FileCsvUploadForm::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form['upload_file']->getData();
+            $fileData = $form['upload_file']->getData();
 
-            $file_uploader->upload($file);
+            $file_uploader->setData($fileData);
             $this->addFlash('success', 'The file has been uploaded successfully!');
         }
         // Generate form.

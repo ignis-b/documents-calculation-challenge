@@ -304,6 +304,9 @@ svg {
 table {
   caption-side: bottom;
   border-collapse: collapse;
+  border-spacing: 5px;
+  margin: 20px;
+  min-width: 300px;
 }
 
 caption {
@@ -316,6 +319,12 @@ caption {
 th {
   text-align: inherit;
   text-align: -webkit-match-parent;
+  background-color: #378647;
+  color: #fff;
+  border: 0;
+}
+tr {
+  border-bottom: 1px solid #343a40 !important;
 }
 
 thead,

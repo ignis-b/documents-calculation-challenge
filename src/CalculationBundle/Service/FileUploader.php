@@ -6,19 +6,39 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use CalculationBundle\Entity\Invoices;
 
+/**
+ * Service for Uploading csv file.
+ *
+ * @author I <ignis.b@gmail.com>
+ */
 class FileUploader
 {
+    /**
+     * Constructor.
+     *
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
     }
-    public function upload(UploadedFile $file) {
+    
+    /**
+     * Import csv data to Database.
+     *
+     * @param UploadedFile $file
+     */
+    public function setData(UploadedFile $file) {
         try {
             if (($handle = fopen($file->getPathname(), "r")) !== false) {
-
+             
                 $count = 0;
                 $batchSize = 1000;
                 while (($data = fgetcsv($handle, 0, ",")) !== false) {
-                    $count++;
+                    if ($count == 0) {
+                        // Remove key column.
+                        $count++;
+                        continue;
+                    }
                     $entity = new Invoices();
 
                     $entity->setCustomer($data[0]);
