@@ -22,32 +22,86 @@ class Calculator extends Controller
     public function indexAction(Request $request) {
         $form = $this->createForm(CalculatorForm::class);
         $form->handleRequest($request);
-    
-        $currency =  new Currency();
-        $a = $currency->getMoneyInEuro(5, 'USD');
-
-        $a = $currency->getMoneyInOtherCurrency(5, 'USD');
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $vat_number = $form['vat_number']->getData();
+            $data = [];
+            
+            if (!empty($form['vat_number']->getData())) {
+                $data['vatNumber'] = $form['vat_number']->getData();
+            }
+            $type = ($form['invoice_type']->getData() != 'null') ? $form['invoice_type']->getData() : '';
 
-            $invoices = $this
+            $documents = $this
                 ->getDoctrine()
                 ->getRepository(Invoices::class)
-                ->findBy(
-                    ['vatNumber' => $vat_number]
-                );
+                ->findBy($data);
+
+            dump($this->getTotal($documents, $type, $form['currencies']->getData()));
+            //$documents=[['customer'=>'Vendor 1','total'=> 400]];
 
             return $this->render("default/calculator.html.twig", [
              'form' => $form->createView(),
-             'invoices' => $invoices
+             'documents' => $documents
             ]);
         }
         // Generate form.
         return $this->render('default/calculator.html.twig', [
             'form' => $form->createView(),
-            'invoices' => []
+            'documents' => []
         ]);
     }
-
+    
+    /**
+     * Get Total.
+     *
+     * @param array $documents
+     * Documents.
+     *
+     * @param int $type
+     * Type.
+     *
+     * @param string $currency
+     * Type.
+     *
+     * @return array
+     * Total.
+     */
+    private function getTotal($documents, $type, $srCurrency) {
+        $data = [];
+        $results = [];
+        $currency =  new Currency();
+        foreach ($documents as $document) {
+            // Total in Euro.
+            $total = $currency->getMoneyInEuro($document->getTotal(), $document->getCurrency());
+            // Update total for specific customer.
+            if (
+                in_array($document->getVatNumber(), array_keys($data)) &&
+                in_array($document->getType(), array_keys($data[$document->getVatNumber()]))
+            ) {
+                $total = $total + $data[$document->getVatNumber()][$document->getType()];
+            }
+            // Generate array by Vat and type[invoice, debit, credit].
+            $data[$document->getVatNumber()][$document->getType()] = $total;
+        }
+        foreach ($data as $key => $value) {
+            switch ($type) {
+                case 1:
+                    $total = $value[$type];
+                    break;
+                case 2:
+                    // Credit.
+                    $total = $value[1] - $value[$type];
+                    break;
+                case 3:
+                    // Debit.
+                    $total = $value[1] + $value[$type];
+                    break;
+                default:
+                    $total = array_sum(array_values($value));
+            }
+            $results[$key]['customer'] = $key;
+            $results[$key]['total'] = $currency->getMoneyInOtherCurrency($total, $srCurrency);
+        }
+        return $results;
+    }
 }

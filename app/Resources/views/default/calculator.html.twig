@@ -22,9 +22,9 @@
                                 {{ form_errors(form.currencies) }}
                             </div>
                             <div class="form-group">
-                                {{ form_label(form.invoice_types) }}
-                                {{ form_widget(form.invoice_types) }}
-                                {{ form_errors(form.invoice_types) }}
+                                {{ form_label(form.invoice_type) }}
+                                {{ form_widget(form.invoice_type) }}
+                                {{ form_errors(form.invoice_type) }}
                             </div>
                             <div class="form-group">
                                 {{ form_widget(form.submit, {'label': "Submit", 'attr' : { 'class': 'btn btn-primary' }}) }}
@@ -33,16 +33,16 @@
                         </div>
                         <div class="col-lg-8">
                             <table>
-                            {% if invoices is not empty %}
+                            {% if documents is not empty %}
                                 <tr>
                                     <th>Customer</th>
                                     <th>Total</th>
                                 </tr>
                             {% endif %}
-                            {% for invoice in invoices %}
+                            {% for document in documents %}
                                 <tr>
-                                <td>{{ invoice.customer }}</td>
-                                <td>{{ invoice.total }} {{ invoice.currency }}</td>
+                                <td>{{ document.customer }}</td>
+                                <td>{{ document.total }} {{ document.currency }}</td>
                                 </tr>
                             {% endfor %}
                             </table>

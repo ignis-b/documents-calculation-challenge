@@ -18,7 +18,7 @@ class CalculatorForm extends AbstractType
             ->add('currencies', CurrencyType::class,
              ['data' => 'GBP']
             )
-            ->add('invoice_types', ChoiceType::class, [
+            ->add('invoice_type', ChoiceType::class, [
                 'choices'  => [
                     '-select-' => 'null',
                     'invoice' => 1,
