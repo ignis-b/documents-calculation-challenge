@@ -6,16 +6,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class FileCsvUploadFile extends AbstractType
+class FileCsvUploadForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('upload_file', FileType::class, [
               'label' => false,
-              'mapped' => false, // Tell that there is no Entity to link
+              'mapped' => false,
               'required' => true,
               'constraints' => [
                new File([
@@ -37,6 +36,6 @@ class FileCsvUploadFile extends AbstractType
                ])
               ],
             ])
-            ->add('send', SubmitType::class);
+            ->add('send', SubmitType::class, ['label' => 'Create Task']);
     }
 }
