@@ -3,7 +3,6 @@
 namespace CalculationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use CalculationBundle\Entity\Invoices;
 
 /**
@@ -25,9 +24,9 @@ class FileUploader
     /**
      * Import csv data to Database.
      *
-     * @param UploadedFile $file
+     * @param string $file
      */
-    public function setData(UploadedFile $file) {
+    public function setData($file) {
         try {
             if (($handle = fopen($file->getPathname(), "r")) !== false) {
              
