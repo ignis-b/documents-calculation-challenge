@@ -24,11 +24,18 @@ class Calculator extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $currency = new Currency();
+            if ($currency->getRate($form['currencies']->getData()) == NULL) {
+                $this->addFlash('error', 'Unsupported currency is passed.');
+                return $this->redirectToRoute("calculator");
+            }
+
             $data = [];
             
             if (!empty($form['vat_number']->getData())) {
-                $data['vatNumber'] = $form['vat_number']->getData();
+                $data['vatNumber'] = intval($form['vat_number']->getData());
             }
+
             $type = ($form['invoice_type']->getData() != 'null') ? $form['invoice_type']->getData() : '';
 
             $documents = $this

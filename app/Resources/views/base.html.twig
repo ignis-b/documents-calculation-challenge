@@ -35,6 +35,12 @@
                     {{ msg }}
                 </div>
             {% endfor %}
+            {% for msg in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    {{ msg }}
+                </div>
+            {% endfor %}
             <div class="text-center my-5">
                 <h1 class="fw-bolder">Upload the CSV file</h1>
                 <p class="lead mb-0">Input a list of currencies and exchange rates (for example: `EUR:1,USD:0.987,GBP:0.878`)</p>
