@@ -15,10 +15,10 @@ class CalculatorForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('vat_number', TextType::class, ['required' => false])
-            ->add('currencies', CurrencyType::class,
+            ->add('currency', CurrencyType::class,
              ['data' => 'GBP']
             )
-            ->add('invoice_type', ChoiceType::class, [
+            ->add('type', ChoiceType::class, [
                 'choices'  => [
                     '-select-' => 'null',
                     'invoice' => 1,

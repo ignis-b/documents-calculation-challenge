@@ -25,7 +25,7 @@ class Calculator extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $currency = new Currency();
-            if ($currency->getRate($form['currencies']->getData()) == NULL) {
+            if ($currency->getRate($form['currency']->getData()) == NULL) {
                 $this->addFlash('error', 'Unsupported currency is passed.');
                 return $this->redirectToRoute("calculator");
             }
@@ -36,7 +36,7 @@ class Calculator extends Controller
                 $data['vatNumber'] = intval($form['vat_number']->getData());
             }
 
-            $type = ($form['invoice_type']->getData() != 'null') ? $form['invoice_type']->getData() : '';
+            $type = ($form['type']->getData() != 'null') ? $form['type']->getData() : '';
 
             $documents = $this
                 ->getDoctrine()
@@ -45,7 +45,7 @@ class Calculator extends Controller
 
             return $this->render("default/calculator.html.twig", [
              'form' => $form->createView(),
-             'documents' => $this->getTotal($documents, $type, $form['currencies']->getData())
+             'documents' => $this->getTotal($documents, $type, $form['currency']->getData())
             ]);
         }
         // Generate form.
